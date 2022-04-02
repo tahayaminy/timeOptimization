@@ -6,6 +6,7 @@ html, body {
 main {
   width: 100%;
   max-width: 640px;
+  min-width: 290px;
 }
 
 .date {
