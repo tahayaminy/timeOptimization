@@ -1,0 +1,22 @@
+html, body {
+  font-size: 14px;
+  background-color: #003459;
+}
+
+.date {
+  color: #FCE38A;
+  background-image: url("../img/age.jpg");
+  background-position: center;
+  /* Center the image */
+  background-repeat: no-repeat;
+  /* Do not repeat the image */
+  background-size: cover;
+}
+.date .age {
+  font-size: 50% !important;
+}
+.date .layer {
+  background-color: rgba(0, 52, 89, 0.5);
+}
+
+/*# sourceMappingURL=style.css.map */

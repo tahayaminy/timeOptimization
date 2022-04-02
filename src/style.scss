@@ -1,0 +1,19 @@
+$dark:#003459;
+$gold:#FCE38A;
+html,body{
+    font-size: 14px;
+    background-color: $dark;
+}
+.date{
+    color: $gold;
+    background-image: url("../img/age.jpg");
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+    .age {
+        font-size: 50% !important;
+    }
+    .layer{
+        background-color: rgba($dark,.5);
+    }
+}
