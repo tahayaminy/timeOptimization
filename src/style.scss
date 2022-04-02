@@ -4,6 +4,10 @@ html,body{
     font-size: 14px;
     background-color: $dark;
 }
+main{
+    width: 100%;
+    max-width: 640px;
+}
 .date{
     color: $gold;
     background-image: url("../img/age.jpg");

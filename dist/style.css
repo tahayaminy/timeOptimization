@@ -3,6 +3,11 @@ html, body {
   background-color: #003459;
 }
 
+main {
+  width: 100%;
+  max-width: 640px;
+}
+
 .date {
   color: #FCE38A;
   background-image: url("../img/age.jpg");
