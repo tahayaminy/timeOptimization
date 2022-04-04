@@ -13,9 +13,7 @@ main {
   color: #FCE38A;
   background-image: url("../img/age.jpg");
   background-position: center;
-  /* Center the image */
   background-repeat: no-repeat;
-  /* Do not repeat the image */
   background-size: cover;
 }
 .date .age {
@@ -23,6 +21,192 @@ main {
 }
 .date .layer {
   background-color: rgba(0, 52, 89, 0.5);
+}
+
+#weather {
+  padding-top: 2em;
+  background-color: #F9F8EB;
+  overflow-x: hidden;
+  min-width: 250px;
+  width: 70%;
+  padding-top: 10%;
+  margin: auto;
+  margin-top: 10%;
+  border-radius: 10px;
+  /*****/
+  /*****/
+}
+#weather .cont {
+  width: 250px;
+  margin: auto;
+  position: relative;
+}
+#weather .speedmeter__hand {
+  width: 5px;
+  height: 102px;
+  background-color: #76B39D;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 0;
+  transform: translate(-50%, -10px) rotateZ(270deg);
+  border-radius: 50% 50% 2px 2px;
+  transform-origin: bottom;
+  transition: 2s ease-out;
+}
+#weather .current-temp, #weather .temp-levels {
+  text-align: center;
+}
+#weather .temp-levels > span {
+  color: #FFFEEC;
+  padding: 0.5em;
+  display: inline-block;
+  margin: 0 1em;
+  transform: translateY(-10%);
+  border-radius: 3px;
+}
+#weather .temp-levels > span:first-child {
+  background-color: #E4508F;
+}
+#weather .temp-levels > span:last-child {
+  background-color: #556FB5;
+}
+#weather .svg-cont {
+  margin-top: 5em;
+  margin-bottom: 2em;
+  position: relative;
+  height: 250px;
+}
+#weather .svg-cont > svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
+#weather .svg-cont > .svg--grid > div {
+  margin: auto;
+  text-align: center;
+}
+#weather .svg-cont > .svg--grid > div > small {
+  font-size: 12px;
+  margin-bottom: 5px;
+  display: block;
+}
+#weather .svg__hr {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(21, 82, 99, 0.1);
+  text-align: center;
+  z-index: 0;
+}
+#weather .svg__hr > span {
+  transform: translateY(-50%);
+  background-color: #fff;
+  display: inline-block;
+  padding: 5px 10px;
+  border: 2px solid rgba(21, 82, 99, 0.1);
+  border-radius: 50px;
+  font-size: 10px;
+}
+#weather .svg--grid i, #weather .svg--grid small, #weather .svg--grid b {
+  display: block;
+}
+#weather .svg--grid b {
+  color: rgba(0, 0, 0, 0.75);
+  font-size: 25px;
+}
+#weather .svg--grid small {
+  color: rgba(0, 0, 0, 0.5);
+}
+#weather .svg--grid i {
+  font-size: 20px;
+}
+#weather .svg--grid .bi-sunrise {
+  color: #F0B917;
+}
+#weather .svg--grid .bi-sunset {
+  color: #155263;
+}
+#weather .svg--grid {
+  display: grid;
+  grid-template-columns: auto;
+  height: 100%;
+}
+#weather svg > circle {
+  stroke-width: 5;
+}
+#weather #holder, #weather #gold-pluk, #weather #dark-pluk {
+  stroke-width: 6.5;
+}
+#weather svg > circle:first-child {
+  stroke: #dee9db;
+}
+#weather svg > circle:nth-child(2) {
+  stroke: #F0B917;
+  stroke-dasharray: 383;
+  stroke-dashoffset: 0;
+  transition: 2s linear;
+}
+#weather svg > circle:nth-child(3) {
+  stroke: #dee9db;
+  stroke-dasharray: 383;
+  stroke-dashoffset: 0;
+}
+#weather circle:nth-child(4) {
+  stroke: #155263;
+  stroke-dasharray: 383;
+  stroke-dashoffset: 383;
+  opacity: 0;
+  transition: stroke-dashoffset 2s linear;
+}
+#weather svg > circle:last-child {
+  stroke: #dee9db;
+  stroke-dasharray: 383;
+  stroke-dashoffset: -383;
+  display: none;
+}
+#weather #holder, #weather #gold, #weather #gold-pluk, #weather #dark, #weather #dark-pluk {
+  r: 122;
+  cx: 125;
+  cy: 125;
+}
+#weather .cont-sun--moon {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  transform: rotate(270deg);
+  transform-origin: 50% 50%;
+  transition: 2s linear;
+  transition-property: transform;
+  z-index: 1;
+  background-color: transparent;
+}
+#weather .cont-sun--moon > div {
+  width: 25px;
+  height: 25px;
+  padding-top: 1px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #F9F8EB;
+  box-shadow: 0px 0px 2px rgba(21, 82, 99, 0.3), 0px 0px 2px rgba(21, 82, 99, 0.3);
+  position: absolute;
+  transform: translateY(-40%);
+}
+#weather .bi-sun-fill {
+  color: #F0B917;
+}
+#weather .bi-moon-stars-fill {
+  color: #155263;
 }
 
 /*# sourceMappingURL=style.css.map */

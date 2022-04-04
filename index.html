@@ -13,6 +13,8 @@
     <link rel="preload" as="font" type="font/woff" crossorigin href="https://parswebdesigners.github.io/font/staticfonts/iransansx-regular.woff" />
     <link rel="stylesheet" href="https://parswebdesigners.github.io/font/font.css"/>
     <link rel="stylesheet" href="./dist/style.css">
+    <meta name="theme-color" content="#003459">
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body dir="rtl">
     <main class="mx-auto">
@@ -26,9 +28,55 @@
                 <h2 dir="ltr" lang="en"><span id="GDay"></span> <span id="GMonth"></span> <span id="GYear"></span></h2>
             </section>
         </section>
+        <section id="weather">
+            <section class="cont">
+                <section>
+                    <img src="./speedmeterdrawing.svg" width="100%" alt="">
+                </section>
+                <section class="speedmeter__hand"></section>
+            </section>
+            <section class="cont">
+                <p class="current-temp"></p>
+                <p class="temp-levels"><span id="downTemp"></span><span id="upTemp"></span></p>
+            </section>
+            <section class="cont svg-cont">
+                <svg>
+                    <circle id="holder" fill="none" /><!--holder-->
+                    <circle id="gold" fill="none" /><!--gold-->
+                    <circle id="gold-pluk" fill="none" /><!--holder for gold-->
+                    <circle id="dark" fill="none" /><!--dark-->
+                    <circle id="dark-pluk" fill="none" /><!--holder for dark-->
+                </svg>
+
+                <div class="cont-sun--moon">
+                    <div>
+                        <i class="bi bi-sun-fill"></i>
+                        <i style="display: none;" class="bi bi-moon-stars-fill"></i>
+                    </div>
+                </div>
+                <section class="svg__hr">
+                    <span>HORIZON</span>
+                </section>
+                <section class="svg--grid">
+                    <div>
+                        <i class="bi bi-sunrise"></i>
+                        <small>Sunrise</small>
+                        <b id="sunrise"><span></span>:<span></span></b>
+                    </div>
+
+                    <div>
+                        <i class="bi bi-sunset"></i>
+                        <small>Sunset</small>
+                        <b id="sunset"><span></span>:<span></span></b>
+                    </div>
+                </section>
+            </section>
+            <br><br>
+        </section>
 
     </main>
 </body>
 <script src="ParsiDate.js"></script>
 <script src="date.js"></script>
+<script src="weather.js"></script>
 </html>

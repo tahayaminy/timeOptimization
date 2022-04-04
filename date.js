@@ -1,4 +1,4 @@
-const $ = el => {
+var $ = el => {
     return document.querySelector(el);
 };
 const gregorianMonth = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
