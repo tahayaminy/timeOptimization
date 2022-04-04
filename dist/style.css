@@ -24,10 +24,11 @@ main {
 }
 
 #weather {
+  direction: ltr;
   padding-top: 2em;
   background-color: #F9F8EB;
   overflow-x: hidden;
-  min-width: 250px;
+  min-width: 270px;
   width: 70%;
   padding-top: 10%;
   margin: auto;
