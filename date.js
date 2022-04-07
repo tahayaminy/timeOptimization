@@ -34,9 +34,6 @@ if(pd.month<=5){
     maxDay=30;
 }
 ageDay=(maxDay - ((maxDay-pd.day)+12));
-console.log(maxDay);
-console.log((maxDay-pd.day)+12);
-console.log(maxDay - ((maxDay-pd.day)+12))
 if(ageDay<maxDay){
     age.day=ageDay;
     $('#ageDay').innerText+=age.day;

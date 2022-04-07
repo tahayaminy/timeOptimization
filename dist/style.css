@@ -29,7 +29,7 @@ main {
   background-color: #F9F8EB;
   overflow-x: hidden;
   min-width: 270px;
-  width: 70%;
+  width: 80%;
   padding-top: 10%;
   margin: auto;
   margin-top: 10%;
@@ -208,6 +208,49 @@ main {
 }
 #weather .bi-moon-stars-fill {
   color: #155263;
+}
+
+.daytime > section {
+  min-width: 270px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fff;
+}
+.daytime > section > p {
+  color: #003459;
+}
+.daytime .value {
+  height: 100%;
+}
+.daytime .daylength, .daytime .first, .daytime .second {
+  height: 20px;
+  direction: ltr;
+}
+.daytime .daylength {
+  width: 100%;
+  background-color: rgba(252, 227, 138, 0.5);
+}
+.daytime .daylength .value {
+  background-color: #FCE38A;
+  width: 80%;
+}
+.daytime .first {
+  background-color: rgba(2, 128, 144, 0.5);
+}
+.daytime .first .value {
+  background-color: #028090;
+  width: 20%;
+}
+.daytime .second {
+  background-color: rgba(2, 195, 154, 0.5);
+}
+.daytime .second .value {
+  background-color: #02C39A;
+  width: 20%;
+}
+.daytime .play {
+  color: #003459;
 }
 
 /*# sourceMappingURL=style.css.map */

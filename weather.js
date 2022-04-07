@@ -7,11 +7,9 @@ if (navigator.cookieEnabled) {
     let httpcheck = new XMLHttpRequest();
     httpcheck.onload = () => {
         if (httpcheck.responseText) {
-            console.log("cookie is set!");
             api = httpcheck.responseText;
             useData(JSON.parse(api));
         } else {
-            console.log("%c cookie is NOT set!", "color:red");
             fetch(
                 "https://api.openweathermap.org/data/2.5/onecall?lat=37.1955948&lon=50.1529566&exclude=alerts,minutely,current&units=metric&appid=81a57d03343af64fed7d77b4fdcb7340"
             )
@@ -81,11 +79,6 @@ if (navigator.cookieEnabled) {
                     let http = new XMLHttpRequest();
                     http.onload = () => {
                         useData(api);
-                        if (http.responseText) {
-                            console.log("yes");
-                        } else {
-                            console.log("no");
-                        }
                     };
                     http.open("POST", "./cookie.php");
                     http.setRequestHeader(
@@ -120,7 +113,6 @@ const DayBreak = (current) => {
 var DayBreakFlag = false;
 
 async function useData(data) {
-    console.log(data);
     var now = new Date();
     var temp;
     for (let hour of data.hourly) {
@@ -161,14 +153,12 @@ async function useData(data) {
 
     current.push(now.getHours());
     current.push(now.getMinutes());
-    console.log(current);
 
     if (MIN(current) >= 0 && MIN(current) <= MIN(times(data.today.sunrise))) {
         DayBreakFlag = true;
     }
     if (MIN(current) > MIN(times(data.today.sunset)) && DayBreakFlag == false) {
         //OK
-        console.log("Is Night!");
         //COMPLETE DAY
         $("#gold").style.strokeDashoffset = "-383";
         $(".cont-sun--moon").style.transform = "rotate(450deg)";
@@ -192,7 +182,6 @@ async function useData(data) {
         $("#sunrise span:last-child").innerText = times(data.tomorrow.sunrise)[1];
     } else if (DayBreakFlag) {
         //OK
-        console.log("Day Break!");
         DayBreak(current);
 
         //COMPELETE DAY
@@ -202,10 +191,8 @@ async function useData(data) {
         let httpcheck=new XMLHttpRequest();
         httpcheck.onload=()=>{
             if (httpcheck.responseText) {
-                console.log("yes");
                 dayBreakfunc(httpcheck.responseText);
             } else {
-                console.log("no");
                 let http=new XMLHttpRequest();
                 fetch(
                     `https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=37.1955948&lon=50.1529566&units=metric&dt=${
@@ -227,7 +214,6 @@ async function useData(data) {
             }
         }
         function dayBreakfunc(prevsunset){
-            console.log(prevsunset);
             sunMoon =
                 ((MIN(daybreak) - MIN(times(prevsunset))) * 180) / (distance + 1);
             setTimeout(Sun, 2000);
@@ -236,7 +222,6 @@ async function useData(data) {
                 $("#dark-pluk").style = "display:block;";
                 $(".bi-moon-stars-fill").style = "display:block;";
                 $(".bi-sun-fill").style = "display:none;";
-                console.log("run");
                 dark =
                     ((MIN(daybreak) - MIN(times(prevsunset))) * 383) /
                     (distance + 1);
@@ -251,7 +236,6 @@ async function useData(data) {
         $("#sunrise span:last-child").innerText = times(data.today.sunrise)[1];
     } else {
         //OK
-        console.log("Is Day!");
         gold =
             ((MIN(current) - MIN(times(data.today.sunrise))) * 383) /
             (MIN(times(data.today.sunset)) - MIN(times(data.today.sunrise)));
