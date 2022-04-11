@@ -240,14 +240,14 @@ main {
 }
 .daytime .first .value {
   background-color: #028090;
-  width: 20%;
+  width: 0%;
 }
 .daytime .second {
   background-color: rgba(2, 195, 154, 0.5);
 }
 .daytime .second .value {
   background-color: #02C39A;
-  width: 20%;
+  width: 0%;
 }
 .daytime .play {
   color: #003459;
