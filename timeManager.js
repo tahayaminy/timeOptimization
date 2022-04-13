@@ -145,7 +145,7 @@ function stop() {
             w = new Worker("worker.js");
         }
         w.postMessage([myTime.others,passedTime,myTime.others.origin])
-        w.onmessage=(e)=>{
+        w.onmessage=(e)=>{;
             $('#otherVal').style.width = e.data[0].width;
             $('#otherText').innerText=e.data[0].text;
             myTime.others.passed=e.data[2];
