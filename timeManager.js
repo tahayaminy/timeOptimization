@@ -3,16 +3,24 @@ let diff = 24 - sleepHour;
 let workToDo;
 let color
 let background;
-let myTime;
 let date=new Date();
-let stopORplay=false;
+var myTime= {
+    sleep: 8,
+    work: {total: 7, passed: [0, 0, 0]},
+    mine: {total: 3, passed: [0, 0, 0]},
+    others: {total: 6, passed: [0, 0, 0],origin:[4,0,0]},
+    date:date.getDate(),
+    stopORplay:false
+};
+
 if(localStorage.getItem("myTime")===null){
     myTime = {
         sleep: 8,
         work: {total: 7, passed: [0, 0, 0]},
         mine: {total: 3, passed: [0, 0, 0]},
         others: {total: 6, passed: [0, 0, 0],origin:[4,0,0]},
-        date:date.getDate()
+        date:date.getDate(),
+        stopORplay:false
     };
     localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
 }else{
@@ -23,6 +31,7 @@ if(localStorage.getItem("myTime")===null){
 function store(){
     localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
 }
+
 setInterval(daylength, 1000);
 
 function daylength() {
@@ -49,7 +58,8 @@ function daylength() {
                 work: {total: 7, passed: [0, 0, 0]},
                 mine: {total: 3, passed: [0, 0, 0]},
                 others: {total: 6, passed: [0, 0, 0],origin: [4,0,0]},
-                date:date.getDate()
+                date:date.getDate(),
+                stopORplay:false
             };
             localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
         }
@@ -92,7 +102,7 @@ let passedTime = {
     sec: 0
 };
 
-if(!stopORplay){
+if(!myTime.stopORplay){
     stop();
 }
 
@@ -123,6 +133,7 @@ function mainTimeWorks() {
     }
 
 }
+
 function stop() {
     passedTime= {
         hour: myTime.others.passed[0],
