@@ -5,12 +5,13 @@ let color
 let background;
 let myTime;
 let date=new Date();
+let stopORplay=false;
 if(localStorage.getItem("myTime")===null){
     myTime = {
         sleep: 8,
         work: {total: 7, passed: [0, 0, 0]},
         mine: {total: 3, passed: [0, 0, 0]},
-        others: {total: 6, passed: [0, 0, 0]},
+        others: {total: 6, passed: [0, 0, 0],origin:[4,0,0]},
         date:date.getDate()
     };
     localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
@@ -18,12 +19,14 @@ if(localStorage.getItem("myTime")===null){
     let local=localStorage.getItem("myTime");
     myTime=JSON.parse(local);
 }
-function store(){localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);}
+
+function store(){
+    localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
+}
 setInterval(daylength, 1000);
 
 function daylength() {
     let date = new Date();
-
     let passedTime = {
         hour: date.getHours() + diff,
         min: date.getMinutes(),
@@ -35,7 +38,6 @@ function daylength() {
         sec: 60 - passedTime.sec,
     };
     if(((passedTime.hour-4)*3600)+(passedTime.min*60)+(passedTime.sec)>(20*3600) && (((passedTime.hour-4)*3600)+(passedTime.min*60)+(passedTime.sec)<((23*3600)+(59*60)+59))){
-
         remainTime = {
             hour: passedTime.hour - 4,
             min: 60 - passedTime.min,
@@ -46,17 +48,13 @@ function daylength() {
                 sleep: 8,
                 work: {total: 7, passed: [0, 0, 0]},
                 mine: {total: 3, passed: [0, 0, 0]},
-                others: {total: 6, passed: [0, 0, 0]},
+                others: {total: 6, passed: [0, 0, 0],origin: [4,0,0]},
                 date:date.getDate()
             };
             localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
         }
     }
-
-
-
     $('#daylengthVal').style.width = `${(((remainTime.hour * 60 * 60) + (remainTime.min * 60) + remainTime.sec) * 100) / (24 * 60 * 60)}%`;
-
     $('#daylengthText').innerText = `${remainTime.hour} ساعت و ${remainTime.min} دقیقه و ${remainTime.sec} ثانیه باقی مانده!`
 }
 
@@ -93,6 +91,10 @@ let passedTime = {
     min: 0,
     sec: 0
 };
+
+if(!stopORplay){
+    stop();
+}
 
 function mainTimeWorks() {
 
@@ -131,7 +133,7 @@ function stop() {
         if(typeof(w) == "undefined") {
             w = new Worker("worker.js");
         }
-        w.postMessage([myTime.others,passedTime])
+        w.postMessage([myTime.others,passedTime,myTime.others.origin])
         w.onmessage=(e)=>{
             $('#otherVal').style.width = e.data[0].width;
             $('#otherText').innerText=e.data[0].text;

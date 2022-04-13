@@ -1,24 +1,19 @@
+let origin;
+let workToDo;
 let passedTime = {
     hour: 0, min: 0, sec: 0
 };
-let workToDo;
+let date=new Date();
 onmessage = (e) => {
     workToDo = e.data[0];
     passedTime = e.data[1];
+    origin=e.data[2];
 }
+console.log(origin)
 let timer = setInterval(() => {
-    if (passedTime.sec + 1 < 60) {
-        passedTime.sec += 1;
-    } else {
-        if (passedTime.min + 1 < 60) {
-            passedTime.min += 1;
-        } else {
-            passedTime.hour += 1;
-            passedTime.min = 0;
-            passedTime.sec = 0;
-        }
-        passedTime.sec = 0;
-    }
+    passedTime.hour=date.getHours()-origin[0];
+    passedTime.min=date.getMinutes()-origin[1];
+    passedTime.sec=date.getSeconds()-origin[2];
     postMessage([{
         width: `${(((passedTime.hour * 60 * 60) + (passedTime.min * 60) + passedTime.sec) * 100) / (workToDo.total * 60 * 60)}%`,
         text: `${passedTime.hour} ساعت و ${passedTime.min} دقیقه`
