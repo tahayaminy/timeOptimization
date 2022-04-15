@@ -10,9 +10,9 @@ onmessage = (e) => {
 }
 let timer = setInterval(() =>{
     let date=new Date();
-    passedTime.hour=date.getHours()-origin[0];
-    passedTime.min=date.getMinutes()-origin[1];
-    passedTime.sec=date.getSeconds()-origin[2];
+    passedTime.hour=Math.abs(date.getHours()-origin[0]);
+    passedTime.min=Math.abs(date.getMinutes()-origin[1]);
+    passedTime.sec=Math.abs(date.getSeconds()-origin[2]);
 
     if ((workToDo.total * 60 * 60) <= ((passedTime.hour * 60 * 60) + (passedTime.min * 60) + (passedTime.sec))) {
         clearInterval(timer)

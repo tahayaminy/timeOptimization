@@ -6,9 +6,9 @@ let background;
 let date=new Date();
 let jsonData={
     sleep: 8,
-    work: {name:'myWork',total: 7, passed: [0, 0, 0],origin:[0,0,0]},
-    mine: {name:'company',total: 3, passed: [0, 0, 0],origin:[0,0,0]},
-    others: {auto:true,total: 6, passed: [0, 0, 0],origin:[7,0,0]},
+    work: {name:'company',total: 7, passed: [0, 0, 0],origin:[0,0,0]},
+    mine: {name:'myWork',total: 3, passed: [0, 0, 0],origin:[0,0,0]},
+    others: {auto:true,total: 6, passed: [0, 0, 0],origin:[10,0,0]},
     date:date.getDate(),
     stopOplay:false,
     prevWork:null
@@ -100,7 +100,8 @@ if(!myTime.stopOplay){
 
 function mainTimeWorks() {
     let date=new Date();
-    myTime.stopOplay=true;
+    //myTime.stopOplay=true;
+
     myTime.others.auto=false;
     myTime.prevWork=workToDo;
     passedTime= {
@@ -108,7 +109,10 @@ function mainTimeWorks() {
         min: workToDo.passed[1],
         sec: workToDo.passed[2]
     };
+    let vari=[passedTime.hour,passedTime.min,passedTime.sec];
     workToDo.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
+
+
 
     if(typeof(Worker) !== "undefined") {
         if(typeof(w) == "undefined") {
@@ -116,9 +120,11 @@ function mainTimeWorks() {
         }
         w.postMessage([workToDo,passedTime,workToDo.origin])
         w.onmessage=(e)=>{
-            $('#worksVal').style.width = e.data[0].width;
-            $('#workText').innerText=e.data[0].text;
-            workToDo.passed=e.data[2];
+            workToDo.passed[0]=e.data[2][0]+vari[0];
+            workToDo.passed[1]=e.data[2][1]+vari[1];
+            workToDo.passed[2]=e.data[2][2]+vari[2];
+            $('#worksVal').style.width = `${(((workToDo.passed[0] * 60 * 60) + (workToDo.passed[1] * 60) + workToDo.passed[2]) * 100) / (workToDo.total * 60 * 60)}%`;
+            $('#workText').innerText=`${workToDo.passed[0]} ساعت و ${workToDo.passed[1]} دقیقه`;
             if(e.data[1]){
                 let stopel=$('#stopel');
                 controll(stopel,1);
@@ -148,7 +154,6 @@ function stop() {
         }
         w.postMessage([myTime.others,passedTime,myTime.others.origin])
         w.onmessage=(e)=>{
-            console.log('stop')
             if(myTime.others.auto){
                 myTime.others.passed=e.data[2];
                 $('#otherVal').style.width = e.data[0].width;
