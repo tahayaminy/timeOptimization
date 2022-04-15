@@ -8,7 +8,7 @@ let jsonData={
     sleep: 8,
     work: {name:'company',total: 7, passed: [0, 0, 0],origin:[0,0,0]},
     mine: {name:'myWork',total: 3, passed: [0, 0, 0],origin:[0,0,0]},
-    others: {auto:true,total: 6, passed: [0, 0, 0],origin:[10,0,0]},
+    others: {auto:true,total: 6, passed: [0, 0, 0],origin:[4,0,0]},
     date:date.getDate(),
     stopOplay:false,
     prevWork:null
