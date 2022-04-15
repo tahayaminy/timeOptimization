@@ -4,24 +4,19 @@ let workToDo;
 let color
 let background;
 let date=new Date();
-var myTime= {
+let jsonData={
     sleep: 8,
-    work: {total: 7, passed: [0, 0, 0]},
-    mine: {total: 3, passed: [0, 0, 0]},
-    others: {total: 6, passed: [0, 0, 0],origin:[4,0,0]},
+    work: {name:'myWork',total: 7, passed: [0, 0, 0],origin:[0,0,0]},
+    mine: {name:'company',total: 3, passed: [0, 0, 0],origin:[0,0,0]},
+    others: {auto:true,total: 6, passed: [0, 0, 0],origin:[7,0,0]},
     date:date.getDate(),
-    stopORplay:false
+    stopOplay:false,
+    prevWork:null
 };
-
+var myTime= jsonData;
+var w;
 if(localStorage.getItem("myTime")===null){
-    myTime = {
-        sleep: 8,
-        work: {total: 7, passed: [0, 0, 0]},
-        mine: {total: 3, passed: [0, 0, 0]},
-        others: {total: 6, passed: [0, 0, 0],origin:[4,0,0]},
-        date:date.getDate(),
-        stopORplay:false
-    };
+    myTime = jsonData;
     localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
 }else{
     let local=localStorage.getItem("myTime");
@@ -46,21 +41,14 @@ function daylength() {
         min: 60 - passedTime.min,
         sec: 60 - passedTime.sec,
     };
-    if(((passedTime.hour-4)*3600)+(passedTime.min*60)+(passedTime.sec)>(20*3600) && (((passedTime.hour-4)*3600)+(passedTime.min*60)+(passedTime.sec)<((23*3600)+(59*60)+59))){
+    if(((passedTime.hour-diff)*3600)+(passedTime.min*60)+(passedTime.sec)>(20*3600) && (((passedTime.hour-diff)*3600)+(passedTime.min*60)+(passedTime.sec)<((23*3600)+(59*60)+59))){
         remainTime = {
-            hour: passedTime.hour - 4,
+            hour: passedTime.hour - diff,
             min: 60 - passedTime.min,
             sec: 60 - passedTime.sec,
         };
         if(date.getDate()!= myTime.date){
-            myTime = {
-                sleep: 8,
-                work: {total: 7, passed: [0, 0, 0]},
-                mine: {total: 3, passed: [0, 0, 0]},
-                others: {total: 6, passed: [0, 0, 0],origin: [4,0,0]},
-                date:date.getDate(),
-                stopORplay:false
-            };
+            myTime = jsonData;
             localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
         }
     }
@@ -102,22 +90,31 @@ let passedTime = {
     sec: 0
 };
 
-if(!myTime.stopORplay){
+if(!myTime.stopOplay){
     stop();
+}else{
+    workToDo=myTime.prevWork;
+    chooseWork(workToDo.name);
+    mainTimeWorks();
 }
 
 function mainTimeWorks() {
-
+    let date=new Date();
+    myTime.stopOplay=true;
+    myTime.others.auto=false;
+    myTime.prevWork=workToDo;
     passedTime= {
         hour: workToDo.passed[0],
         min: workToDo.passed[1],
         sec: workToDo.passed[2]
     };
+    workToDo.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
+
     if(typeof(Worker) !== "undefined") {
         if(typeof(w) == "undefined") {
             w = new Worker("worker.js");
         }
-        w.postMessage([workToDo,passedTime])
+        w.postMessage([workToDo,passedTime,workToDo.origin])
         w.onmessage=(e)=>{
             $('#worksVal').style.width = e.data[0].width;
             $('#workText').innerText=e.data[0].text;
@@ -140,15 +137,29 @@ function stop() {
         min: myTime.others.passed[1],
         sec: myTime.others.passed[2]
     };
+    let vari=[passedTime.hour,passedTime.min,passedTime.sec]
+    if(!myTime.others.auto){
+        let date=new Date();
+        myTime.others.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
+    }
     if(typeof(Worker) !== "undefined") {
         if(typeof(w) == "undefined") {
             w = new Worker("worker.js");
         }
         w.postMessage([myTime.others,passedTime,myTime.others.origin])
-        w.onmessage=(e)=>{;
-            $('#otherVal').style.width = e.data[0].width;
-            $('#otherText').innerText=e.data[0].text;
-            myTime.others.passed=e.data[2];
+        w.onmessage=(e)=>{
+            console.log('stop')
+            if(myTime.others.auto){
+                myTime.others.passed=e.data[2];
+                $('#otherVal').style.width = e.data[0].width;
+                $('#otherText').innerText=e.data[0].text;
+            }else{
+                myTime.others.passed[0]=e.data[2][0]+vari[0];
+                myTime.others.passed[1]=e.data[2][1]+vari[1];
+                myTime.others.passed[2]=e.data[2][2]+vari[2];
+                $('#otherVal').style.width = `${(((myTime.others.passed[0] * 60 * 60) + (myTime.others.passed[1] * 60) + myTime.others.passed[2]) * 100) / (myTime.others.total * 60 * 60)}%`;
+                $('#otherText').innerText=`${myTime.others.passed[0]} ساعت و ${myTime.others.passed[1]} دقیقه`;
+            }
             if(e.data[1]){
                 let stopel=$('#stopel');
                 controll(stopel,1);
@@ -158,4 +169,7 @@ function stop() {
     } else {
         console.log("c% Sorry, your browser does not support Web Workers...",'color:red');
     }
+}
+function clearw(){
+    w.terminate();
 }
