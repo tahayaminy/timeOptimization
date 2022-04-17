@@ -57,7 +57,7 @@ function daylength() {
 }
 
 function controll(el, shart) {
-    if (shart == 0) {
+    if (shart == 0){
         el.classList.add('hidden');
         el.nextElementSibling.classList.remove('hidden');
         mainTimeWorks();
@@ -96,11 +96,13 @@ if(!myTime.stopOplay){
     workToDo=myTime.prevWork;
     chooseWork(workToDo.name);
     mainTimeWorks();
+    let playel=$('#playel');
+    controll(playel,0);
 }
 
 function mainTimeWorks() {
     let date=new Date();
-    //myTime.stopOplay=true;
+    myTime.stopOplay=true;
 
     myTime.others.auto=false;
     myTime.prevWork=workToDo;
@@ -143,6 +145,7 @@ function stop() {
         min: myTime.others.passed[1],
         sec: myTime.others.passed[2]
     };
+    myTime.stopOplay=false;
     let vari=[passedTime.hour,passedTime.min,passedTime.sec]
     if(!myTime.others.auto){
         let date=new Date();
@@ -175,6 +178,11 @@ function stop() {
         console.log("c% Sorry, your browser does not support Web Workers...",'color:red');
     }
 }
+chooseWork(myTime.prevWork.name);
+$('#worksVal').style.width = `${(((myTime.prevWork.passed[0] * 60 * 60) + (myTime.prevWork.passed[1] * 60) + myTime.prevWork.passed[2]) * 100) / (myTime.prevWork.total * 60 * 60)}%`;
+$('#workText').innerText=`${myTime.prevWork.passed[0]} ساعت و ${myTime.prevWork.passed[1]} دقیقه`;
+$('#otherVal').style.width = `${(((myTime.others.passed[0] * 60 * 60) + (myTime.others.passed[1] * 60) + myTime.others.passed[2]) * 100) / (myTime.others.total * 60 * 60)}%`;
+$('#otherText').innerText=`${myTime.others.passed[0]} ساعت و ${myTime.others.passed[1]} دقیقه`;
 function clearw(){
     w.terminate();
 }
