@@ -46,11 +46,14 @@ function daylength() {
             hour: passedTime.hour - diff,
             min: 60 - passedTime.min,
             sec: 60 - passedTime.sec,
-        };
-        if(date.getDate()!= myTime.date){
-            myTime = jsonData;
-            localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
         }
+
+    }
+    if(date.getDate() != myTime.date){
+
+        myTime = jsonData;
+        localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
+
     }
     $('#daylengthVal').style.width = `${(((remainTime.hour * 60 * 60) + (remainTime.min * 60) + remainTime.sec) * 100) / (24 * 60 * 60)}%`;
     $('#daylengthText').innerText = `${remainTime.hour} ساعت و ${remainTime.min} دقیقه و ${remainTime.sec} ثانیه باقی مانده!`
@@ -178,9 +181,11 @@ function stop() {
         console.log("c% Sorry, your browser does not support Web Workers...",'color:red');
     }
 }
-chooseWork(myTime.prevWork.name);
-$('#worksVal').style.width = `${(((myTime.prevWork.passed[0] * 60 * 60) + (myTime.prevWork.passed[1] * 60) + myTime.prevWork.passed[2]) * 100) / (myTime.prevWork.total * 60 * 60)}%`;
-$('#workText').innerText=`${myTime.prevWork.passed[0]} ساعت و ${myTime.prevWork.passed[1]} دقیقه`;
+if(!(myTime.others.auto)){
+    chooseWork(myTime.prevWork.name);
+    $('#worksVal').style.width = `${(((myTime.prevWork.passed[0] * 60 * 60) + (myTime.prevWork.passed[1] * 60) + myTime.prevWork.passed[2]) * 100) / (myTime.prevWork.total * 60 * 60)}%`;
+    $('#workText').innerText=`${myTime.prevWork.passed[0]} ساعت و ${myTime.prevWork.passed[1]} دقیقه`;
+}
 $('#otherVal').style.width = `${(((myTime.others.passed[0] * 60 * 60) + (myTime.others.passed[1] * 60) + myTime.others.passed[2]) * 100) / (myTime.others.total * 60 * 60)}%`;
 $('#otherText').innerText=`${myTime.others.passed[0]} ساعت و ${myTime.others.passed[1]} دقیقه`;
 function clearw(){
