@@ -14,6 +14,7 @@ let jsonData={
     prevWork:null
 };
 var myTime= jsonData;
+var trigger=true;
 var w;
 if(localStorage.getItem("myTime")===null){
     myTime = jsonData;
@@ -64,6 +65,7 @@ function controll(el, shart) {
         el.classList.add('hidden');
         el.nextElementSibling.classList.remove('hidden');
         mainTimeWorks();
+        console.log(workToDo.origin);
     } else if (shart == 1) {
         el.classList.add('hidden');
         el.previousElementSibling.classList.remove('hidden');
@@ -97,13 +99,17 @@ if(!myTime.stopOplay){
     stop();
 }else{
     workToDo=myTime.prevWork;
+    console.log(workToDo.origin);
     chooseWork(workToDo.name);
+    trigger=false;
     mainTimeWorks();
     let playel=$('#playel');
     controll(playel,0);
 }
 
 function mainTimeWorks() {
+
+    console.log(workToDo.origin);
     let date=new Date();
     myTime.stopOplay=true;
 
@@ -114,9 +120,15 @@ function mainTimeWorks() {
         min: workToDo.passed[1],
         sec: workToDo.passed[2]
     };
-    let vari=[passedTime.hour,passedTime.min,passedTime.sec];
-    workToDo.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
 
+    console.log(workToDo.origin);
+    let vari=[passedTime.hour,passedTime.min,passedTime.sec];
+    if(trigger){
+        console.log(run)
+        workToDo.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
+    }
+
+    console.log(workToDo.origin);
 
 
     if(typeof(Worker) !== "undefined") {
