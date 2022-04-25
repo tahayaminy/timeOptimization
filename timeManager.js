@@ -124,7 +124,6 @@ function mainTimeWorks() {
     console.log(workToDo.origin);
     let vari=[passedTime.hour,passedTime.min,passedTime.sec];
     if(trigger){
-        console.log(run)
         workToDo.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
     }
 
@@ -142,7 +141,7 @@ function mainTimeWorks() {
             workToDo.passed[2]=e.data[2][2]+vari[2];
             $('#worksVal').style.width = `${(((workToDo.passed[0] * 60 * 60) + (workToDo.passed[1] * 60) + workToDo.passed[2]) * 100) / (workToDo.total * 60 * 60)}%`;
             $('#workText').innerText=`${workToDo.passed[0]} ساعت و ${workToDo.passed[1]} دقیقه`;
-            if(e.data[1]){
+            if(e.data[1] || ((workToDo.total * 60 * 60) <= ((passedTime.hour * 60 * 60) + (passedTime.min * 60) + (passedTime.sec)))){
                 let stopel=$('#stopel');
                 controll(stopel,1);
             }
