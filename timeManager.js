@@ -65,7 +65,6 @@ function controll(el, shart) {
         el.classList.add('hidden');
         el.nextElementSibling.classList.remove('hidden');
         mainTimeWorks();
-        console.log(workToDo.origin);
     } else if (shart == 1) {
         el.classList.add('hidden');
         el.previousElementSibling.classList.remove('hidden');
@@ -99,20 +98,15 @@ if(!myTime.stopOplay){
     stop();
 }else{
     workToDo=myTime.prevWork;
-    console.log(workToDo.origin);
     chooseWork(workToDo.name);
     trigger=false;
-    mainTimeWorks();
     let playel=$('#playel');
     controll(playel,0);
 }
 
 function mainTimeWorks() {
-
-    console.log(workToDo.origin);
     let date=new Date();
     myTime.stopOplay=true;
-
     myTime.others.auto=false;
     myTime.prevWork=workToDo;
     passedTime= {
@@ -120,14 +114,11 @@ function mainTimeWorks() {
         min: workToDo.passed[1],
         sec: workToDo.passed[2]
     };
-
-    console.log(workToDo.origin);
     let vari=[passedTime.hour,passedTime.min,passedTime.sec];
     if(trigger){
         workToDo.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
     }
 
-    console.log(workToDo.origin);
 
 
     if(typeof(Worker) !== "undefined") {
@@ -135,12 +126,19 @@ function mainTimeWorks() {
             w = new Worker("worker.js");
         }
         w.postMessage([workToDo,passedTime,workToDo.origin])
+        let i=0;
         w.onmessage=(e)=>{
+            console.log(e.data[2]);
+            console.log(vari)
+
             workToDo.passed[0]=e.data[2][0]+vari[0];
             workToDo.passed[1]=e.data[2][1]+vari[1];
-            workToDo.passed[2]=e.data[2][2]+vari[2];
+            workToDo.passed[2]=e.data[2][2]+vari[2]
+            console.log(workToDo.passed)
+            console.warn('***');
             $('#worksVal').style.width = `${(((workToDo.passed[0] * 60 * 60) + (workToDo.passed[1] * 60) + workToDo.passed[2]) * 100) / (workToDo.total * 60 * 60)}%`;
             $('#workText').innerText=`${workToDo.passed[0]} ساعت و ${workToDo.passed[1]} دقیقه`;
+
             if(e.data[1] || ((workToDo.total * 60 * 60) <= ((passedTime.hour * 60 * 60) + (passedTime.min * 60) + (passedTime.sec)))){
                 let stopel=$('#stopel');
                 controll(stopel,1);
@@ -154,23 +152,26 @@ function mainTimeWorks() {
 }
 
 function stop() {
+    if(!myTime.others.auto){
+        let date=new Date();
+        myTime.others.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
+    }
+    myTime.stopOplay=false;
     passedTime= {
         hour: myTime.others.passed[0],
         min: myTime.others.passed[1],
         sec: myTime.others.passed[2]
     };
-    myTime.stopOplay=false;
     let vari=[passedTime.hour,passedTime.min,passedTime.sec]
-    if(!myTime.others.auto){
-        let date=new Date();
-        myTime.others.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
-    }
+
     if(typeof(Worker) !== "undefined") {
         if(typeof(w) == "undefined") {
             w = new Worker("worker.js");
         }
         w.postMessage([myTime.others,passedTime,myTime.others.origin])
         w.onmessage=(e)=>{
+            console.log(e.data[2]);
+            console.log(vari)
             if(myTime.others.auto){
                 myTime.others.passed=e.data[2];
                 $('#otherVal').style.width = e.data[0].width;
@@ -182,6 +183,9 @@ function stop() {
                 $('#otherVal').style.width = `${(((myTime.others.passed[0] * 60 * 60) + (myTime.others.passed[1] * 60) + myTime.others.passed[2]) * 100) / (myTime.others.total * 60 * 60)}%`;
                 $('#otherText').innerText=`${myTime.others.passed[0]} ساعت و ${myTime.others.passed[1]} دقیقه`;
             }
+
+            console.log(myTime.others.passed);
+            console.warn('***')
             if(e.data[1]){
                 let stopel=$('#stopel');
                 controll(stopel,1);
