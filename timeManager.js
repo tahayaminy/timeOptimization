@@ -50,12 +50,12 @@ function daylength() {
         }
 
     }
-    if(date.getDate() != myTime.date){
-
-        myTime = jsonData;
-        localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
-
-    }
+    // if(date.getDate() != myTime.date){
+    //
+    //     myTime = jsonData;
+    //     localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
+    //
+    // }
     $('#daylengthVal').style.width = `${(((remainTime.hour * 60 * 60) + (remainTime.min * 60) + remainTime.sec) * 100) / (24 * 60 * 60)}%`;
     $('#daylengthText').innerText = `${remainTime.hour} ساعت و ${remainTime.min} دقیقه و ${remainTime.sec} ثانیه باقی مانده!`
 }
