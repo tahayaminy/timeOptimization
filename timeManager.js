@@ -1,32 +1,32 @@
 let sleepHour = 20;
 let diff = 24 - sleepHour;
-let workToDo;
-let color
-let background;
-let date=new Date();
-let jsonData={
-    sleep: 8,
-    work: {name:'company',total: 7, passed: [0, 0, 0],origin:[0,0,0]},
-    mine: {name:'myWork',total: 3, passed: [0, 0, 0],origin:[0,0,0]},
-    others: {auto:true,total: 6, passed: [0, 0, 0],origin:[4,0,0]},
-    date:date.getDate(),
-    stopOplay:false,
-    prevWork:null
-};
-var myTime= jsonData;
-var trigger=true;
-var w;
-if(localStorage.getItem("myTime")===null){
-    myTime = jsonData;
-    localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
-}else{
-    let local=localStorage.getItem("myTime");
-    myTime=JSON.parse(local);
-}
+// let workToDo;
+// let color
+// let background;
+// let date=new Date();
+// let jsonData={
+//     sleep: 8,
+//     work: {name:'company',total: 7, passed: [0, 0, 0],origin:[0,0,0]},
+//     mine: {name:'myWork',total: 3, passed: [0, 0, 0],origin:[0,0,0]},
+//     others: {auto:true,total: 6, passed: [0, 0, 0],origin:[4,0,0]},
+//     date:date.getDate(),
+//     stopOplay:false,
+//     prevWork:null
+// };
+// var myTime= jsonData;
+// var trigger=true;
+// var w;
+// if(localStorage.getItem("myTime")===null){
+//     myTime = jsonData;
+//     localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
+// }else{
+//     let local=localStorage.getItem("myTime");
+//     myTime=JSON.parse(local);
+// }
 
-function store(){
-    localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
-}
+// function store(){
+//     localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
+// }
 
 setInterval(daylength, 1000);
 
@@ -60,149 +60,149 @@ function daylength() {
     $('#daylengthText').innerText = `${remainTime.hour} ساعت و ${remainTime.min} دقیقه و ${remainTime.sec} ثانیه باقی مانده!`
 }
 
-function controll(el, shart) {
-    if (shart == 0){
-        el.classList.add('hidden');
-        el.nextElementSibling.classList.remove('hidden');
-        mainTimeWorks();
-    } else if (shart == 1) {
-        el.classList.add('hidden');
-        el.previousElementSibling.classList.remove('hidden');
-        stop();
-    }
-}
-
-function chooseWork(work) {
-    if (work == 'myWork') {
-        workToDo = myTime.mine;
-        color='#003459';
-        background='#0034597f'
-        $('#worksVal').style.background=color;
-        $('#worksCont').style.background=background;
-    } else if (work == 'company') {
-        workToDo = myTime.work;
-        color='#028090';
-        background='#0280907f';
-        $('#worksVal').style.background=color;
-        $('#worksCont').style.background=background;
-    }
-}
-
-let passedTime = {
-    hour: 0,
-    min: 0,
-    sec: 0
-};
-
-if(!myTime.stopOplay){
-    stop();
-}else{
-    workToDo=myTime.prevWork;
-    chooseWork(workToDo.name);
-    trigger=false;
-    let playel=$('#playel');
-    controll(playel,0);
-}
-
-function mainTimeWorks() {
-    let date=new Date();
-    myTime.stopOplay=true;
-    myTime.others.auto=false;
-    myTime.prevWork=workToDo;
-    passedTime= {
-        hour: workToDo.passed[0],
-        min: workToDo.passed[1],
-        sec: workToDo.passed[2]
-    };
-    let vari=[passedTime.hour,passedTime.min,passedTime.sec];
-    if(trigger){
-        workToDo.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
-    }
-
-
-
-    if(typeof(Worker) !== "undefined") {
-        if(typeof(w) == "undefined") {
-            w = new Worker("worker.js");
-        }
-        w.postMessage([workToDo,passedTime,workToDo.origin])
-        let i=0;
-        w.onmessage=(e)=>{
-            console.log(e.data[2]);
-            console.log(vari)
-
-            workToDo.passed[0]=e.data[2][0]+vari[0];
-            workToDo.passed[1]=e.data[2][1]+vari[1];
-            workToDo.passed[2]=e.data[2][2]+vari[2]
-            console.log(workToDo.passed)
-            console.warn('***');
-            $('#worksVal').style.width = `${(((workToDo.passed[0] * 60 * 60) + (workToDo.passed[1] * 60) + workToDo.passed[2]) * 100) / (workToDo.total * 60 * 60)}%`;
-            $('#workText').innerText=`${workToDo.passed[0]} ساعت و ${workToDo.passed[1]} دقیقه`;
-
-            if(e.data[1] || ((workToDo.total * 60 * 60) <= ((passedTime.hour * 60 * 60) + (passedTime.min * 60) + (passedTime.sec)))){
-                let stopel=$('#stopel');
-                controll(stopel,1);
-            }
-            store();
-        }
-    } else {
-        console.log("c% Sorry, your browser does not support Web Workers...",'color:red');
-    }
-
-}
-
-function stop() {
-    if(!myTime.others.auto){
-        let date=new Date();
-        myTime.others.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
-    }
-    myTime.stopOplay=false;
-    passedTime= {
-        hour: myTime.others.passed[0],
-        min: myTime.others.passed[1],
-        sec: myTime.others.passed[2]
-    };
-    let vari=[passedTime.hour,passedTime.min,passedTime.sec]
-
-    if(typeof(Worker) !== "undefined") {
-        if(typeof(w) == "undefined") {
-            w = new Worker("worker.js");
-        }
-        w.postMessage([myTime.others,passedTime,myTime.others.origin])
-        w.onmessage=(e)=>{
-            console.log(e.data[2]);
-            console.log(vari)
-            if(myTime.others.auto){
-                myTime.others.passed=e.data[2];
-                $('#otherVal').style.width = e.data[0].width;
-                $('#otherText').innerText=e.data[0].text;
-            }else{
-                myTime.others.passed[0]=e.data[2][0]+vari[0];
-                myTime.others.passed[1]=e.data[2][1]+vari[1];
-                myTime.others.passed[2]=e.data[2][2]+vari[2];
-                $('#otherVal').style.width = `${(((myTime.others.passed[0] * 60 * 60) + (myTime.others.passed[1] * 60) + myTime.others.passed[2]) * 100) / (myTime.others.total * 60 * 60)}%`;
-                $('#otherText').innerText=`${myTime.others.passed[0]} ساعت و ${myTime.others.passed[1]} دقیقه`;
-            }
-
-            console.log(myTime.others.passed);
-            console.warn('***')
-            if(e.data[1]){
-                let stopel=$('#stopel');
-                controll(stopel,1);
-            }
-            store();
-        }
-    } else {
-        console.log("c% Sorry, your browser does not support Web Workers...",'color:red');
-    }
-}
-if(!(myTime.others.auto)){
-    chooseWork(myTime.prevWork.name);
-    $('#worksVal').style.width = `${(((myTime.prevWork.passed[0] * 60 * 60) + (myTime.prevWork.passed[1] * 60) + myTime.prevWork.passed[2]) * 100) / (myTime.prevWork.total * 60 * 60)}%`;
-    $('#workText').innerText=`${myTime.prevWork.passed[0]} ساعت و ${myTime.prevWork.passed[1]} دقیقه`;
-}
-$('#otherVal').style.width = `${(((myTime.others.passed[0] * 60 * 60) + (myTime.others.passed[1] * 60) + myTime.others.passed[2]) * 100) / (myTime.others.total * 60 * 60)}%`;
-$('#otherText').innerText=`${myTime.others.passed[0]} ساعت و ${myTime.others.passed[1]} دقیقه`;
-function clearw(){
-    w.terminate();
-}
+// function controll(el, shart) {
+//     if (shart == 0){
+//         el.classList.add('hidden');
+//         el.nextElementSibling.classList.remove('hidden');
+//         mainTimeWorks();
+//     } else if (shart == 1) {
+//         el.classList.add('hidden');
+//         el.previousElementSibling.classList.remove('hidden');
+//         stop();
+//     }
+// }
+//
+// function chooseWork(work) {
+//     if (work == 'myWork') {
+//         workToDo = myTime.mine;
+//         color='#003459';
+//         background='#0034597f'
+//         $('#worksVal').style.background=color;
+//         $('#worksCont').style.background=background;
+//     } else if (work == 'company') {
+//         workToDo = myTime.work;
+//         color='#028090';
+//         background='#0280907f';
+//         $('#worksVal').style.background=color;
+//         $('#worksCont').style.background=background;
+//     }
+// }
+//
+// let passedTime = {
+//     hour: 0,
+//     min: 0,
+//     sec: 0
+// };
+//
+// if(!myTime.stopOplay){
+//     stop();
+// }else{
+//     workToDo=myTime.prevWork;
+//     chooseWork(workToDo.name);
+//     trigger=false;
+//     let playel=$('#playel');
+//     controll(playel,0);
+// }
+//
+// function mainTimeWorks() {
+//     let date=new Date();
+//     myTime.stopOplay=true;
+//     myTime.others.auto=false;
+//     myTime.prevWork=workToDo;
+//     passedTime= {
+//         hour: workToDo.passed[0],
+//         min: workToDo.passed[1],
+//         sec: workToDo.passed[2]
+//     };
+//     let vari=[passedTime.hour,passedTime.min,passedTime.sec];
+//     if(trigger){
+//         workToDo.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
+//     }
+//
+//
+//
+//     if(typeof(Worker) !== "undefined") {
+//         if(typeof(w) == "undefined") {
+//             w = new Worker("worker.js");
+//         }
+//         w.postMessage([workToDo,passedTime,workToDo.origin])
+//         let i=0;
+//         w.onmessage=(e)=>{
+//             console.log(e.data[2]);
+//             console.log(vari)
+//
+//             workToDo.passed[0]=e.data[2][0]+vari[0];
+//             workToDo.passed[1]=e.data[2][1]+vari[1];
+//             workToDo.passed[2]=e.data[2][2]+vari[2]
+//             console.log(workToDo.passed)
+//             console.warn('***');
+//             $('#worksVal').style.width = `${(((workToDo.passed[0] * 60 * 60) + (workToDo.passed[1] * 60) + workToDo.passed[2]) * 100) / (workToDo.total * 60 * 60)}%`;
+//             $('#workText').innerText=`${workToDo.passed[0]} ساعت و ${workToDo.passed[1]} دقیقه`;
+//
+//             if(e.data[1] || ((workToDo.total * 60 * 60) <= ((passedTime.hour * 60 * 60) + (passedTime.min * 60) + (passedTime.sec)))){
+//                 let stopel=$('#stopel');
+//                 controll(stopel,1);
+//             }
+//             store();
+//         }
+//     } else {
+//         console.log("c% Sorry, your browser does not support Web Workers...",'color:red');
+//     }
+//
+// }
+//
+// function stop() {
+//     if(!myTime.others.auto){
+//         let date=new Date();
+//         myTime.others.origin=[date.getHours(),date.getMinutes(),date.getSeconds()];
+//     }
+//     myTime.stopOplay=false;
+//     passedTime= {
+//         hour: myTime.others.passed[0],
+//         min: myTime.others.passed[1],
+//         sec: myTime.others.passed[2]
+//     };
+//     let vari=[passedTime.hour,passedTime.min,passedTime.sec]
+//
+//     if(typeof(Worker) !== "undefined") {
+//         if(typeof(w) == "undefined") {
+//             w = new Worker("worker.js");
+//         }
+//         w.postMessage([myTime.others,passedTime,myTime.others.origin])
+//         w.onmessage=(e)=>{
+//             console.log(e.data[2]);
+//             console.log(vari)
+//             if(myTime.others.auto){
+//                 myTime.others.passed=e.data[2];
+//                 $('#otherVal').style.width = e.data[0].width;
+//                 $('#otherText').innerText=e.data[0].text;
+//             }else{
+//                 myTime.others.passed[0]=e.data[2][0]+vari[0];
+//                 myTime.others.passed[1]=e.data[2][1]+vari[1];
+//                 myTime.others.passed[2]=e.data[2][2]+vari[2];
+//                 $('#otherVal').style.width = `${(((myTime.others.passed[0] * 60 * 60) + (myTime.others.passed[1] * 60) + myTime.others.passed[2]) * 100) / (myTime.others.total * 60 * 60)}%`;
+//                 $('#otherText').innerText=`${myTime.others.passed[0]} ساعت و ${myTime.others.passed[1]} دقیقه`;
+//             }
+//
+//             console.log(myTime.others.passed);
+//             console.warn('***')
+//             if(e.data[1]){
+//                 let stopel=$('#stopel');
+//                 controll(stopel,1);
+//             }
+//             store();
+//         }
+//     } else {
+//         console.log("c% Sorry, your browser does not support Web Workers...",'color:red');
+//     }
+// }
+// if(!(myTime.others.auto)){
+//     chooseWork(myTime.prevWork.name);
+//     $('#worksVal').style.width = `${(((myTime.prevWork.passed[0] * 60 * 60) + (myTime.prevWork.passed[1] * 60) + myTime.prevWork.passed[2]) * 100) / (myTime.prevWork.total * 60 * 60)}%`;
+//     $('#workText').innerText=`${myTime.prevWork.passed[0]} ساعت و ${myTime.prevWork.passed[1]} دقیقه`;
+// }
+// $('#otherVal').style.width = `${(((myTime.others.passed[0] * 60 * 60) + (myTime.others.passed[1] * 60) + myTime.others.passed[2]) * 100) / (myTime.others.total * 60 * 60)}%`;
+// $('#otherText').innerText=`${myTime.others.passed[0]} ساعت و ${myTime.others.passed[1]} دقیقه`;
+// function clearw(){
+//     w.terminate();
+// }

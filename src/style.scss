@@ -247,8 +247,17 @@ main {
     color: #155263;
   }
 }
-
+.space-custom{
+  margin-bottom: 100px;
+}
 .daytime {
+  position: fixed;
+  bottom: 0px;
+  padding-bottom: 10px;
+  left: 0;
+  right: 0;
+  background: rgb(0, 52, 89,.970);
+  z-index: 50;
   &>section {
     min-width: 270px;
     width: 80%;
