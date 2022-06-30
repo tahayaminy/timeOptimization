@@ -28,7 +28,7 @@ let diff = 24 - sleepHour;
 //     localStorage.setItem("myTime",`${JSON.stringify(myTime)}`);
 // }
 
-setInterval(daylength, 1000);
+// setInterval(daylength, 1000);
 
 function daylength() {
     let date = new Date();
