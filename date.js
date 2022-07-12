@@ -17,32 +17,30 @@ $('#GMonth').innerText=gregorianMonth[d.getMonth()];
 $('#GYear').innerText=d.getFullYear();
 
 //accurate age
-let age={}
-let ageYear=pd.year-1380;
-let ageMonth;
-if(pd.month<=3){
-    ageYear--;
-    ageMonth=pd.month+12;
-    ageMonth-=4;
-    age.year=ageYear;
-    age.month=ageMonth;
+let age={};
+let myBirth='1380/04/12';
+myBirth=myBirth.split("/");
+for(let i=0;i < myBirth.length;i++){
+    myBirth[i]=Number(myBirth[i]);
 }
-let maxDay;
-if(pd.month<=5){
-    maxDay=31;
-}else{
-    maxDay=30;
-}
-ageDay=Math.abs(maxDay - (Math.abs((pd.day-12))));
-if(ageDay<maxDay){
-    age.day=ageDay;
-    $('#ageDay').innerText+=age.day;
+age.year=Math.abs(pd.year - myBirth[0]);
+age.month=Math.abs((pd.month+1) - myBirth[1]);
+age.day=Math.abs(pd.day - myBirth[2]);
+
+if(age.day!=0){
     $('#ageDayTxt').classList.remove('hidden');
+    $('#ageDay').innerText+=age.day;
 }
-//month
-$('#ageMonthTxt').classList.remove('hidden');
+
+if(age.month!=0){
+    console.log('run')
+    $('#ageMonthTxt').classList.remove('hidden');
+    $('#ageMonth').innerText=age.month;
+}
+if(age.month ==0 && age.day==0){
+    $('#completeYear').classList.add('hidden');
+}
 
 $('#ageYear').innerText=age.year;
-$('#ageMonth').innerText=age.month;
 
 

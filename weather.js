@@ -1,3 +1,4 @@
+var date=new Date();
 function unixHour(num) {
     var sec = new Date(num * 1000);
     return sec.getHours();
@@ -39,43 +40,17 @@ if (navigator.cookieEnabled) {
                     var expire;
                     for (let hour of obj.hourly) {
                         if (unixHour(hour.dt) == 0) {
-                            expire = calcExpire(hour.dt);
+                            date.setHours(23);
+                            date.setMinutes(0);
+                            date.setSeconds(0);
+                            let now = Math.floor(date.getTime() / 1000);
+                            expire = now;
                             break;
                         } else {
                             api.hourly.push({ dt: hour.dt, temp: hour.temp });
                         }
                     }
-                    function calcExpire(timestamp) {
-                        let current = new Date(api.today.dt * 1000);
-                        let cuHour = current.getHours();
-                        let cuMin = current.getMinutes();
-                        let cuSec = current.getSeconds();
-                        let expire = new Date(timestamp * 1000);
-                        let exHour = expire.getHours();
-                        let exMin = expire.getMinutes();
-                        let exSec = expire.getSeconds();
-                        if (
-                            exHour * 3600 + exMin * 60 + exSec >
-                            cuHour * 3600 + cuMin * 60 + cuSec
-                        ) {
-                            return (
-                                exHour * 3600 +
-                                exMin * 60 +
-                                exSec -
-                                (cuHour * 3600 + cuMin * 60 + cuSec)
-                            );
-                        } else if (
-                            exHour * 3600 + exMin * 60 + exSec <
-                            cuHour * 3600 + cuMin * 60 + cuSec
-                        ) {
-                            return (
-                                cuHour * 3600 +
-                                cuMin * 60 +
-                                cuSec -
-                                (exHour * 3600 + exMin * 60 + exSec)
-                            );
-                        }
-                    }
+
                     let http = new XMLHttpRequest();
                     http.onload = () => {
                         useData(api);
